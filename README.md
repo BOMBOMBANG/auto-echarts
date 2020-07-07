@@ -15,5 +15,6 @@ npm run serve
 npm run build
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### 在src/components目录中是主要逻辑代码
+
+### src/view/components/testEchart.vue是一个测试模块
