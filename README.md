@@ -1,4 +1,4 @@
-# test-tsvue
+# auto-echarts
 
 ## Project setup
 ```
