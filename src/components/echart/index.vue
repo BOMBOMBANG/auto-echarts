@@ -3,13 +3,12 @@
 </template>
 
 <script>
-import echarts from "echarts"
 import baseEchart from "./baseEchart.ts";
 export default {
   props: {
     myId: {
       type: String,
-      default: "common-echarts"
+      default: "common-line"
     },
     series: {
       type: Array,
@@ -34,6 +33,16 @@ export default {
     isDataZoom: {
       type: Boolean,
       default: true
+    },
+    units: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
+    raft: {
+      type: Number,
+      default: 60
     }
   },
   data() {
@@ -46,11 +55,11 @@ export default {
     initOption() {
       let isDataZoom = this.isDataZoom;
       const width = document.getElementById(this.myId).clientWidth,
-        length = this.classes.length,
-        raft = 60;
-      if (width / length < raft && this.isDataZoom) {
+        length = this.classes.length;
+        // console.log(width, length, width / length, (width / length / raft));
+      if (width / length < this.raft && this.isDataZoom) {
         this.start = 0;
-        this.end = (width / length) / raft *100
+        this.end = (width / length) / this.raft *100
       } else {
         this.start = 0;
         this.end = 100;
@@ -65,14 +74,15 @@ export default {
         this.isLegend,
         isDataZoom,
         this.start,
-        this.end
+        this.end,
+        this.units
       ).getOption();
     },
     renderEchart() {
-      const myEchart = echarts.init(document.getElementById(this.myId));
-      myEchart.setOption(this.initOption());
+      const echart = this.$echarts.init(document.getElementById(this.myId));
+      echart.setOption(this.initOption());
       window.addEventListener("resize", () => {
-        myEchart.resize();
+        echart.resize();
       });
     }
   },

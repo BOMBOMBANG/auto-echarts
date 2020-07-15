@@ -1,5 +1,16 @@
+/**
+ * @param color
+ * @param series
+ * @param classes
+ * @param isLegend
+ * @param isDataZoom
+ * @param start
+ * @param end
+ * @param units
+ */
 class option {
-  constructor(color: String[], series: Object[], classes: String[], isLegend: Boolean, isDataZoom: Boolean, start: Number, end: Number) {
+  constructor(color: String[], series: Object[], classes: String[], isLegend: Boolean, isDataZoom: Boolean, start: Number, end: Number, units: Object) {
+
     this.color = color
     this.series = series
     this.classes = classes
@@ -7,6 +18,7 @@ class option {
     this.isDataZoom = isDataZoom || false
     this.start = start || 0
     this.end = end || 100
+    this.units = units || {}
   }
   private color: String[];
   private series: Object[];
@@ -15,6 +27,8 @@ class option {
   private isDataZoom: Boolean;
   private start: Number;
   private end: Number;
+  private units: Object;
+
   public setIsDataZoom(isDataZoom: Boolean) {
     this.isDataZoom = isDataZoom
   }
@@ -60,7 +74,15 @@ class option {
         containLabel: true
       },
       tooltip: {
-        trigger: "axis"
+        trigger: "axis",
+        formatter: (params) => {
+          var relVal = params[0].name;
+          for (var i = 0, l = params.length; i < l; i++) {
+            relVal += '<br/>' + params[i].marker + params[i].seriesName + ' : ' + params[i].value + (this.units[params[i].seriesName]||'');
+          }
+          return relVal;
+        }
+        // show:false
       },
       legend: {
         show: this.isLegend,
@@ -162,9 +184,6 @@ class option {
       ],
       series: this.series
     }
-    // if (this.isDataZoom) {
-    //   _option.dataZoom[0].end = 50
-    // }
     return _option
   }
 }
